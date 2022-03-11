@@ -10,14 +10,15 @@ ogres_escaped = 0
 giants_escaped = 0
 times_injured = 0
 
+player_hp_visual = "\u2764"
 def typewrite(text):
-  for i in text:
-    stdout.write(i)
-    stdout.flush()
-    # random float number between 0.055 and 0.085
-    # to make the typewriter look more human
-    sleep(round(uniform(0.055, 0.095), 3))
- 
+    for i in text:
+        stdout.write(i)
+        stdout.flush()
+        # random float number between 0.055 and 0.085
+        # to make the typewriter look more human
+        sleep(round(uniform(0.055, 0.095), 3))
+
 typewrite("The Mystic Forest\n")
 while True:
     # if players hp is 0 or less, they die
@@ -52,7 +53,7 @@ while True:
             else:
                 times_injured += 1
                 player_hp -= 2
-                typewrite("You lost 2 hp. Your hp is now " + str(player_hp) + ".\n")
+                typewrite("You lost 2 hp. HP: " + " ".join(player_hp_visual*player_hp) + " .\n")
         elif dice_roll == 2:
             typewrite("You are fighting an ogre.\n")
             # if player has shield, escape the ogre and lose the shield. if player doesn't have shield, lose 3 hp.
@@ -64,7 +65,7 @@ while True:
             else:
                 times_injured += 1
                 player_hp -= 3
-                typewrite("You lost 3 hp. Your hp is now " + str(player_hp) + ".\n")
+                typewrite("You lost 3 hp. HP: " + " ".join(player_hp_visual*player_hp) + " .\n")
         elif dice_roll == 3:
             typewrite("You are fighting a giant.\n")
             # if player has armour, escape the giant and lose the armour. if player doesn't have armour, lose 4 hp.
@@ -76,7 +77,7 @@ while True:
             else:
                 times_injured += 1
                 player_hp -= 4
-                typewrite("You lost 4 hp. Your hp is now " + str(player_hp) + ".\n")
+                typewrite("You lost 4 hp. HP: " + " ".join(player_hp_visual*player_hp) + " .\n")
         elif dice_roll == 4:
             typewrite("You found a thief!\n")
             # if player has items in bag, thief steals first item
@@ -90,13 +91,13 @@ while True:
             # if player hp is 7 or less, add 3. if player hp is 8, add 2. if player hp is 9, add 1.
             if player_hp <= 7:
                 player_hp += 3
-                typewrite("You gained 3 hp. Your hp is now " + str(player_hp) + ".\n")
+                typewrite("You gained 3 hp. HP: " + " ".join(player_hp_visual*player_hp) + " .\n")
             elif player_hp == 8:
                 player_hp += 2
-                typewrite("You gained 2 hp. Your hp is now " + str(player_hp) + ".\n")
+                typewrite("You gained 2 hp. HP: " + " ".join(player_hp_visual*player_hp) + " .\n")
             elif player_hp == 9:
                 player_hp += 1
-                typewrite("You gained 1 hp. Your hp is now " + str(player_hp) + ".\n")
+                typewrite("You gained 1 hp. HP: " + " ".join(player_hp_visual*player_hp) + " .\n")
             else:
                 typewrite("You already have 10 hp.\n")
         elif dice_roll == 6:
