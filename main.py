@@ -53,7 +53,10 @@ while True:
             else:
                 times_injured += 1
                 player_hp -= 2
-                typewrite("You lost 2 hp. HP: " + " ".join(player_hp_visual*player_hp) + " .\n")
+                if player_hp <= 0:
+                    typewrite("You lost 2 hp. HP: 0.\n")
+                else:
+                    typewrite("You lost 2 hp. HP: " + " ".join(player_hp_visual*player_hp) + " .\n")
         elif dice_roll == 2:
             typewrite("You are fighting an ogre.\n")
             # if player has shield, escape the ogre and lose the shield. if player doesn't have shield, lose 3 hp.
@@ -65,7 +68,10 @@ while True:
             else:
                 times_injured += 1
                 player_hp -= 3
-                typewrite("You lost 3 hp. HP: " + " ".join(player_hp_visual*player_hp) + " .\n")
+                if player_hp <= 0:
+                    typewrite("You lost 3 hp. HP: 0.\n")
+                else:
+                    typewrite("You lost 3 hp. HP: " + " ".join(player_hp_visual*player_hp) + " .\n")
         elif dice_roll == 3:
             typewrite("You are fighting a giant.\n")
             # if player has armour, escape the giant and lose the armour. if player doesn't have armour, lose 4 hp.
@@ -77,7 +83,10 @@ while True:
             else:
                 times_injured += 1
                 player_hp -= 4
-                typewrite("You lost 4 hp. HP: " + " ".join(player_hp_visual*player_hp) + " .\n")
+                if player_hp <= 0:
+                    typewrite("You lost 4 hp. HP: 0.\n")
+                else:
+                    typewrite("You lost 4 hp. HP: " + " ".join(player_hp_visual*player_hp) + " .\n")
         elif dice_roll == 4:
             typewrite("You found a thief!\n")
             # if player has items in bag, thief steals first item
