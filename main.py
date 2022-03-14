@@ -1,8 +1,17 @@
-from sys import stdout
+from sys import stdout, modules
 from time import sleep
 from random import randint, uniform
- 
-bag_contents = ["Beginner's Sword\U0001F5E1","Adventurer's Armour\u26E8","Beginner's Shield\U0001F6E1"]
+
+unicode_supported = False
+
+if "idlelib" in modules:
+    bag_contents = ["Beginner's Sword","Adventurer's Armour","Beginner's Shield"]
+elif "idlelib" not in modules:
+    unicode_supported = True
+    bag_contents = ["Beginner's Sword\U0001F5E1","Adventurer's Armour\u26E8","Beginner's Shield\U0001F6E1"]
+else:
+    print("Something went wrong with the IDLE detector.")
+
 player_hp = 10
 exitprompt = False
 trolls_killed = 0
@@ -10,7 +19,10 @@ ogres_escaped = 0
 giants_escaped = 0
 times_injured = 0
 
+# this unicode character works because it only has 4 bytes 
+# and IDLE only supports 4-byte unicode characters (in Python 3.6+)
 player_hp_visual = "\u2764"
+
 def typewrite(text):
     for i in text:
         stdout.write(i)
@@ -45,10 +57,13 @@ while True:
         if dice_roll == 1:
             typewrite("You are fighting a troll.\n")
             # if player has sword, kill the troll and break the sword. if player doesn't have sword, lose 2 hp.
-            if "Beginner's Sword\U0001F5E1" in bag_contents:
+            if "Beginner's Sword\U0001F5E1" or "Beginner's Sword" in bag_contents:
                 typewrite("You killed the troll!\n")
                 trolls_killed += 1
-                bag_contents.remove("Beginner's Sword\U0001F5E1")
+                if unicode_supported == True:
+                    bag_contents.remove("Beginner's Sword\U0001F5E1")
+                else:
+                    bag_contents.remove("Beginner's Sword")
                 typewrite("You broke the sword!\n")
             else:
                 times_injured += 1
@@ -60,10 +75,13 @@ while True:
         elif dice_roll == 2:
             typewrite("You are fighting an ogre.\n")
             # if player has shield, escape the ogre and lose the shield. if player doesn't have shield, lose 3 hp.
-            if "Beginner's Shield\U0001F6E1" in bag_contents:
+            if "Beginner's Shield\U0001F6E1" or "Beginner's Shield" in bag_contents:
                 typewrite("You escaped the ogre!\n")
                 ogres_escaped += 1
-                bag_contents.remove("Beginner's Shield\U0001F6E1")
+                if unicode_supported == True:
+                    bag_contents.remove("Beginner's Shield\U0001F6E1")
+                else:
+                    bag_contents.remove("Beginner's Shield")
                 typewrite("You lost the shield!\n")
             else:
                 times_injured += 1
@@ -75,10 +93,13 @@ while True:
         elif dice_roll == 3:
             typewrite("You are fighting a giant.\n")
             # if player has armour, escape the giant and lose the armour. if player doesn't have armour, lose 4 hp.
-            if "Adventurer's Armour\u26E8" in bag_contents:
+            if "Adventurer's Armour\u26E8" or "Adventurer's Armour" in bag_contents:
                 typewrite("You escaped the giant!\n")
                 giants_escaped += 1
-                bag_contents.remove("Adventurer's Armour\u26E8")
+                if unicode_supported == True:
+                    bag_contents.remove("Adventurer's Armour\u26E8")
+                else:
+                    bag_contents.remove("Adventurer's Armour")
                 typewrite("You lost the armour!\n")
             else:
                 times_injured += 1
@@ -114,10 +135,19 @@ while True:
             random_num = randint(1,3)
             if random_num == 1:
                 typewrite("You found a sword!\n")
-                bag_contents.append("Beginner's Sword\U0001F5E1")
+                if unicode_supported == True:
+                    bag_contents.append("Beginner's Sword\U0001F5E1")
+                else:
+                    bag_contents.append("Beginner's Sword")
             elif random_num == 2:
                 typewrite("You found armor!\n")
-                bag_contents.append("Adventurer's Armour\u26E8")
+                if unicode_supported == True:
+                    bag_contents.append("Adventurer's Armour\u26E8")
+                else:
+                    bag_contents.append("Adventurer's Armour")
             elif random_num == 3:
                 typewrite("You found a shield!\n")
-                bag_contents.append("Beginner's Shield\U0001F6E1")
+                if unicode_supported == True:
+                    bag_contents.append("Beginner's Shield\U0001F6E1")
+                else:
+                    bag_contents.append("Beginner's Shield")
