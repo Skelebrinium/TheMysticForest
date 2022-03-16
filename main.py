@@ -12,12 +12,7 @@ elif "idlelib" not in modules:
 else:
     print("Something went wrong with the IDLE detector.")
 
-player_hp = 10
-exitprompt = False
-trolls_killed = 0
-ogres_escaped = 0
-giants_escaped = 0
-times_injured = 0
+player_hp, exitprompt, trolls_killed, ogres_escaped, giants_escaped, times_injured = (10, False, 0, 0, 0, 0)
 
 # this unicode character works because it only has 4 bytes 
 # and IDLE only supports 4-byte unicode characters (in Python 3.6+)
