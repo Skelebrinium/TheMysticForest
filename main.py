@@ -33,18 +33,18 @@ while True:
         print("Trolls killed: " + str(trolls_killed) + "\n" + "Ogres escaped: " + str(ogres_escaped) + "\n" + "Giants escaped: " + str(giants_escaped) + "\n" + "Times injured: " + str(times_injured))
         quit()
     option = str(input())
-    if option == "0":
+    if "0" in option:
         typewrite("Your statistics:\n")
         print("Trolls killed: " + str(trolls_killed) + "\n" + "Ogres escaped: " + str(ogres_escaped) + "\n" + "Giants escaped: " + str(giants_escaped) + "\n" + "Times injured: " + str(times_injured))
         quit()
-    elif option == "1":
+    elif "1" in option:
         typewrite("Bag contents:\n")
         if len(bag_contents) == 0:
             typewrite("Your bag is empty.\n")
         else:
             for item in bag_contents:
                 print(item)
-    elif option == "2":
+    elif "2" in option:
         dice_roll = randint(1,6)
         typewrite("You rolled a " + str(dice_roll) + ".\n")
         if dice_roll == 1:
@@ -139,7 +139,7 @@ while True:
                 else:
                     bag_contents.append("Beginner's Sword")
             elif random_num == 2:
-                typewrite("You found armor!\n")
+                typewrite("You found armour!\n")
                 if unicode_supported == True:
                     bag_contents.append("Adventurer's Armour\u26E8")
                 else:
@@ -150,3 +150,5 @@ while True:
                     bag_contents.append("Beginner's Shield\U0001F6E1")
                 else:
                     bag_contents.append("Beginner's Shield")
+    else:
+        print("That is not a correct command.")
