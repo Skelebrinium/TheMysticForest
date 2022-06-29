@@ -5,7 +5,6 @@ from random import randint, uniform
 from playsounds import playsound
 
 unicode_supported = False
-
 if "idlelib" in sys.modules:
     # IDLE has partial unicode support(up to 4-byte unicode characters) so \u26E8 works
     player_hp_visual = ["\u2764", "\u274C"]
@@ -19,6 +18,8 @@ else:
 
 player_hp, exitprompt, trolls_killed, ogres_escaped, giants_escaped, times_injured, potions_used, werewolves_killed = (10, False, 0, 0, 0, 0, 0, 0)
 attack_shields = 0
+global coins
+coins = 0
 
 def typewrite(text):
     for i in text:
@@ -26,7 +27,7 @@ def typewrite(text):
         sys.stdout.flush()
         # random float number between 0.055 and 0.085
         # to make the typewriter look more human
-        sleep(round(uniform(0.055, 0.095), 3))
+        sleep(round(uniform(0.045, 0.075), 3))
 
 def addCharUntilLength(text, length, char):
     # count the number of characters in the string and add the specified character until the string is the specified length. do not count whitespace
@@ -38,6 +39,21 @@ def addCharUntilLength(text, length, char):
         else:
             text += char
     return text
+
+def buyItem(item, cost, isPotion, containsUnicode):
+    global coins
+    if coins >= cost:
+        coins -= cost
+        if isPotion:
+            potion_bag_contents.append(item)
+        else:
+            bag_contents.append(item)
+        if containsUnicode:
+            typewrite("You bought a '" + item + " ' for " + str(cost) + " coins.\n")
+        else:
+            typewrite("You bought a '" + item + "' for " + str(cost) + " coins.\n")
+    else:
+        typewrite("You don't have enough coins to buy a '" + item + "'.\n")
 
 typewrite("The Mystic Forest\n")
 while exitprompt == False:
@@ -79,12 +95,20 @@ while exitprompt == False:
                     if "Beginner's Sword\U0001F5E1" in bag_contents:
                         playsound("./sounds/enemy_death.mp3", False)
                         typewrite("You killed the troll!\n")
+                        coins_gained = randint(150, 220)
+                        typewrite("You found " + str(coins_gained) + " coins!\n")
+                        coins += coins_gained
+                        typewrite("You now have " + str(coins) + " coins.\n")
                         trolls_killed += 1
                         bag_contents.remove("Beginner's Sword\U0001F5E1")
                         typewrite("You broke the sword!\n")
                     elif "Beginner's Sword" in bag_contents:
                         playsound("./sounds/enemy_death.mp3", False)
                         typewrite("You killed the troll!\n")
+                        coins_gained = randint(150, 220)
+                        typewrite("You found " + str(coins_gained) + " coins!\n")
+                        coins += coins_gained
+                        typewrite("You now have " + str(coins) + " coins.\n")
                         trolls_killed += 1
                         bag_contents.remove("Beginner's Sword")
                         typewrite("You broke the sword!\n")
@@ -109,12 +133,20 @@ while exitprompt == False:
                     if "Beginner's Shield\U0001F6E1" in bag_contents:
                         playsound("./sounds/escape_enemy.mp3", False)
                         typewrite("You escaped the ogre!\n")
+                        coins_gained = randint(50, 75)
+                        typewrite("While escaping, you found " + str(coins_gained) + " coins!\n")
+                        coins += coins_gained
+                        typewrite("You now have " + str(coins) + " coins.\n")
                         ogres_escaped += 1
                         bag_contents.remove("Beginner's Shield\U0001F6E1")
                         typewrite("You lost the shield!\n")
                     elif "Beginner's Shield" in bag_contents:
                         playsound("./sounds/escape_enemy.mp3", False)
                         typewrite("You escaped the ogre!\n")
+                        coins_gained = randint(50, 75)
+                        typewrite("While escaping, you found " + str(coins_gained) + " coins!\n")
+                        coins += coins_gained
+                        typewrite("You now have " + str(coins) + " coins.\n")
                         ogres_escaped += 1
                         bag_contents.remove("Beginner's Shield")
                         typewrite("You lost the shield!\n")
@@ -139,6 +171,10 @@ while exitprompt == False:
                     if "Adventurer's Armour\u26E8" in bag_contents:
                         playsound("./sounds/escape_enemy.mp3", False)
                         typewrite("You escaped the giant!\n")
+                        coins_gained = randint(75, 100)
+                        typewrite("While escaping, you found " + str(coins_gained) + " coins!\n")
+                        coins += coins_gained
+                        typewrite("You now have " + str(coins) + " coins.\n")
                         giants_escaped += 1
                         bag_contents.remove("Adventurer's Armour\u26E8")
                         typewrite("You lost the armour!\n")
@@ -186,10 +222,10 @@ while exitprompt == False:
                         typewrite("You already have 10 hp.\n")
                 elif dice_roll == 6:
                     # random item 1-3 is added to bag
-                    random_num = randint(1, 6)
+                    random_num = randint(1, 7)
                     if random_num == 1:
                         typewrite("You found a sword!\n")
-                        if unicode_supported == True:
+                        if unicode_supported:
                             playsound("./sounds/new_item.mp3", False)
                             bag_contents.append("Beginner's Sword\U0001F5E1")
                         else:
@@ -201,7 +237,7 @@ while exitprompt == False:
                         bag_contents.append("Adventurer's Armour\u26E8")
                     elif random_num == 3:
                         typewrite("You found a shield!\n")
-                        if unicode_supported == True:
+                        if unicode_supported:
                             playsound("./sounds/new_item.mp3", False)
                             bag_contents.append("Beginner's Shield\U0001F6E1")
                         else:
@@ -210,7 +246,7 @@ while exitprompt == False:
                     elif random_num == 4:
                         typewrite("You found a silver knife!\n")
                         playsound("./sounds/new_item.mp3", False)
-                        if unicode_supported == True:
+                        if unicode_supported:
                             bag_contents.append("Silver Knife\U0001F5E1")
                         else:
                             bag_contents.append("Silver Knife")
@@ -222,18 +258,31 @@ while exitprompt == False:
                         typewrite("You found a shield potion!\n")
                         playsound("./sounds/new_item.mp3", False)
                         potion_bag_contents.append("Shield Potion\u26E8")
+                    elif random_num == 7:
+                        coins_gained = randint(290, 330)
+                        typewrite("You found " + str(coins_gained) + " coins!\n")
+                        coins += coins_gained
+                        typewrite("You now have " + str(coins) + " coins.\n")
                 elif dice_roll == 7:
                     typewrite("You are fighting a werewolf!\n")
                     # if player has silver knife, kill the werewolf and lose the knife. if player doesn't have silver knife, lose 4 hp.
                     if "Silver Knife\U0001F5E1" in bag_contents:
                         playsound("./sounds/enemy_death.mp3", False)
                         typewrite("You killed the werewolf!\n")
+                        coins_gained = randint(250, 300)
+                        typewrite("You found " + str(coins_gained) + " coins!\n")
+                        coins += coins_gained
+                        typewrite("You now have " + str(coins) + " coins.\n")
                         werewolves_killed += 1
                         bag_contents.remove("Silver Knife\U0001F5E1")
                         typewrite("You lost the silver knife!\n")
                     elif "Silver Knife" in bag_contents:
                         playsound("./sounds/enemy_death.mp3", False)
                         typewrite("You killed the werewolf!\n")
+                        coins_gained = randint(250, 300)
+                        typewrite("You found " + str(coins_gained) + " coins!\n")
+                        coins += coins_gained
+                        typewrite("You now have " + str(coins) + " coins.\n")
                         werewolves_killed += 1
                         bag_contents.remove("Silver Knife")
                         typewrite("You lost the silver knife!\n")
@@ -294,5 +343,48 @@ while exitprompt == False:
                             typewrite("You don't have any shield potions.\n")
                     else:
                         typewrite("That is not a potion.\n")
+            elif "4" in character:
+                typewrite("You have " + str(coins) + " coins.\n")
+                if coins == 0:
+                    typewrite("You have no coins.\n")
+                else:
+                    typewrite("Item Shop: \n")
+                    if unicode_supported:
+                        print("1. Beginner's Sword\U0001F5E1 : 50 Coins\n2. Adventurer's Armour\u26E8 : 60 Coins\n3. Beginner's Shield\U0001F6E1 : 75 Coins\n4. Silver Knife\U0001F5E1 : 125 Coins\n5. Health Potion\u2764 : 50 Coins\n6. Shield Potion\u26E8 : 75 Coins\n7. Exit Shop\n")
+                        shop_option = str(input("What would you like to buy? "))
+                        # buyItem parameters: item, cost, isPotion, containsUnicode
+                        if shop_option == "1":
+                            buyItem("Beginner's Sword\U0001F5E1", 50, False, True)
+                        elif shop_option == "2":
+                            buyItem("Adventurer's Armour\u26E8", 60, False, True)
+                        elif shop_option == "3":
+                            buyItem("Beginner's Shield\U0001F6E1", 75, False, True)
+                        elif shop_option == "4":
+                            buyItem("Silver Knife\U0001F5E1", 125, False, True)
+                        elif shop_option == "5":
+                            buyItem("Health Potion\u2764", 50, True, True)
+                        elif shop_option == "6":
+                            buyItem("Shield Potion\u26E8", 75, True, True)
+                        elif shop_option == "7":
+                            typewrite("You left the shop.\n")
+                    else:
+                        # some unicode characters are not supported
+                        print("1. Beginner's Sword: 50 Coins\n2. Adventurer's Armour\u26E8 : 60 Coins\n3. Beginner's Shield: 75 Coins\n4. Silver Knife: 125 Coins\n5. Health Potion\u2764 : 50 Coins\n6. Shield Potion\u26E8 : 75 Coins\n7. Exit Shop\n")
+                        shop_option = str(input("What would you like to buy? "))
+                        # buyItem parameters: item, cost, isPotion, containsUnicode
+                        if shop_option == "1":
+                            buyItem("Beginner's Sword", 50, False, False)
+                        elif shop_option == "2":
+                            buyItem("Adventurer's Armour\u26E8", 60, False, True)
+                        elif shop_option == "3":
+                            buyItem("Beginner's Shield", 75, False, False)
+                        elif shop_option == "4":
+                            buyItem("Silver Knife", 125, False, False)
+                        elif shop_option == "5":
+                            buyItem("Health Potion\u2764", 50, True, True)
+                        elif shop_option == "6":
+                            buyItem("Shield Potion\u26E8", 75, True, True)
+                        elif shop_option == "7":
+                            typewrite("You left the shop.\n")
             else:
                 print("That is not a correct command.")
