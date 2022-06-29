@@ -19,7 +19,9 @@ else:
 player_hp, exitprompt, trolls_killed, ogres_escaped, giants_escaped, times_injured, potions_used, werewolves_killed = (10, False, 0, 0, 0, 0, 0, 0)
 attack_shields = 0
 global coins
-coins = 0
+global items_bought
+items_bought = 0
+coins = 3000
 
 def typewrite(text):
     for i in text:
@@ -41,6 +43,7 @@ def addCharUntilLength(text, length, char):
     return text
 
 def buyItem(item, cost, isPotion, containsUnicode):
+    global items_bought
     global coins
     if coins >= cost:
         coins -= cost
@@ -49,8 +52,10 @@ def buyItem(item, cost, isPotion, containsUnicode):
         else:
             bag_contents.append(item)
         if containsUnicode:
+            items_bought += 1
             typewrite("You bought a '" + item + " ' for " + str(cost) + " coins.\n")
         else:
+            items_bought += 1
             typewrite("You bought a '" + item + "' for " + str(cost) + " coins.\n")
     else:
         typewrite("You don't have enough coins to buy a '" + item + "'.\n")
@@ -61,7 +66,7 @@ while exitprompt == False:
     if player_hp <= 0:
         typewrite("You have died.\n")
         typewrite("Your statistics:\n")
-        print("Trolls killed: " + str(trolls_killed) + "\n" + "Ogres escaped: " + str(ogres_escaped) + "\n" + "Giants escaped: " + str(giants_escaped) + "\n" + "Times injured: " + str(times_injured) + "\n" + "Potions used: " + str(potions_used) + "\n" + "Werewolves killed: " + str(werewolves_killed))
+        print("Trolls killed: " + str(trolls_killed) + "\n" + "Ogres escaped: " + str(ogres_escaped) + "\n" + "Giants escaped: " + str(giants_escaped) + "\n" + "Times injured: " + str(times_injured) + "\n" + "Potions used: " + str(potions_used) + "\n" + "Werewolves killed: " + str(werewolves_killed) + "\n" + "Items Bought: " + str(items_bought) + "\n" + "Coins: " + str(coins))
         exitprompt = True
     else:
         option = str(input())
@@ -71,11 +76,11 @@ while exitprompt == False:
             if player_hp <= 0:
                 typewrite("You have died.\n")
                 typewrite("Your statistics:\n")
-                print("Trolls killed: " + str(trolls_killed) + "\n" + "Ogres escaped: " + str(ogres_escaped) + "\n" + "Giants escaped: " + str(giants_escaped) + "\n" + "Times injured: " + str(times_injured) + "\n" + "Potions used: " + str(potions_used) + "\n" + "Werewolves killed: " + str(werewolves_killed))
+                print("Trolls killed: " + str(trolls_killed) + "\n" + "Ogres escaped: " + str(ogres_escaped) + "\n" + "Giants escaped: " + str(giants_escaped) + "\n" + "Times injured: " + str(times_injured) + "\n" + "Potions used: " + str(potions_used) + "\n" + "Werewolves killed: " + str(werewolves_killed) + "\n" + "Items Bought: " + str(items_bought) + "\n" + "Coins: " + str(coins))
                 exitprompt = True
             if "0" in character:
                 typewrite("Your statistics:\n")
-                print("Trolls killed: " + str(trolls_killed) + "\n" + "Ogres escaped: " + str(ogres_escaped) + "\n" + "Giants escaped: " + str(giants_escaped) + "\n" + "Times injured: " + str(times_injured) + "\n" + "Potions used: " + str(potions_used) + "\n" + "Werewolves killed: " + str(werewolves_killed))
+                print("Trolls killed: " + str(trolls_killed) + "\n" + "Ogres escaped: " + str(ogres_escaped) + "\n" + "Giants escaped: " + str(giants_escaped) + "\n" + "Times injured: " + str(times_injured) + "\n" + "Potions used: " + str(potions_used) + "\n" + "Werewolves killed: " + str(werewolves_killed) + "\n" + "Items Bought: " + str(items_bought) + "\n" + "Coins: " + str(coins))
                 exitprompt = True
             elif "1" in character:
                 playsound("./sounds/open_bag.mp3", False)

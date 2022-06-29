@@ -1,5 +1,5 @@
 # TheMysticForest
-Current version: 2.1.0
+Current version: 2.2.0
 ___
 ## Attribution:
 Sound effects from [Freesound](https://freesound.org/)
